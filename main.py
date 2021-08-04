@@ -1,5 +1,26 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
+
+def exportToCSV(tab) :
+    # field names
+    fields = ['Name', 'Branch', 'Year', 'CGPA']
+
+    # data rows of csv file
+    rows = tab
+    # name of csv file
+    filename = "university_records.csv"
+
+    # writing to csv file
+    with open(filename, 'w') as csvfile:
+        # creating a csv writer object
+        csvwriter = csv.writer(csvfile)
+
+        # writing the fields
+        csvwriter.writerow(fields)
+
+        # writing the data rows
+        csvwriter.writerows(rows)
 
 
 def getdata(url):
@@ -66,6 +87,9 @@ if __name__ == "__main__":
         temp = 0
 
         for i in range(0, len(job_res)):
+            tabl = [job_res] + [com_res] + [url_res]
+            exportToCSV(tabl)
+            print(tabl)
             print("Company Name and Address : " + com_res[i])
             print("Job : " + job_res[i])
             print("Url : " + "https://fr.indeed.com" + url_res[i])
