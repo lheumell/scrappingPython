@@ -1,5 +1,28 @@
+import csv
+
 import requests
 from bs4 import BeautifulSoup
+
+def exportToCSV(tab) :
+    # field names
+    fields = ['Name', 'Branch', 'Year', 'CGPA']
+
+    # data rows of csv file
+    rows = tab
+    # name of csv file
+    filename = "university_records.csv"
+
+    # writing to csv file
+    with open(filename, 'w') as csvfile:
+        # creating a csv writer object
+        csvwriter = csv.writer(csvfile)
+
+        # writing the fields
+        csvwriter.writerow(fields)
+
+        # writing the data rows
+        csvwriter.writerows(rows)
+
 
 
 def getdata(url):
@@ -53,23 +76,35 @@ if __name__ == "__main__":
     lookAllJob = job.split(', ')
     print("Enter your location:")
     location = input()
+    lookAllLocation = location.split(', ')
+    print("En télétravail ?")
+    remote = input()
+    if remote == "y":
+        option = '&remotejob=032b3046-06a3-4876-8dfd-474eb5e7ed11'
+    else:
+        option = ''
+
     for job in lookAllJob:
-        url = "https://fr.indeed.com/emplois?q=" + job + "&l=" + location + "&jt=apprenticeship"
+        for location in lookAllLocation:
 
-        soup = html_code(url)
+            url = "https://fr.indeed.com/emplois?q=" + job + "&l=" + location + option
 
-        job_res = job_data(soup)
-        com_res = company_data(soup)
-        all_res = all_data(soup)
-        url_res = url_data(soup)
+            soup = html_code(url)
 
-        temp = 0
+            job_res = job_data(soup)
+            com_res = company_data(soup)
+            all_res = all_data(soup)
+            url_res = url_data(soup)
 
-        for i in range(0, len(job_res)):
-            print("Company Name and Address : " + com_res[i])
-            print("Job : " + job_res[i])
-            print("Url : " + "https://fr.indeed.com" + url_res[i])
-            print("All : " + all_res[i])
-            print("-----------------------------")
+            temp = 0
 
-        print("Nombre de resultats : " + str(len(job_res)))
+            for i in range(0, len(job_res)):
+                tabl = [job_res] + [com_res] + [url_res]
+                exportToCSV(tabl)
+                print("Company Name and Address : " + com_res[i])
+                print("Job : " + job_res[i])
+                print("Url : " + "https://fr.indeed.com" + url_res[i])
+                print("All : " + all_res[i])
+                print("-----------------------------")
+
+            print("Nombre de resultats pour " + job + " a " + location + " : " + str(len(job_res)))
