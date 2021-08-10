@@ -40,8 +40,8 @@ def all_data(soup):
 
 def url_data(soup):
     res = []
-    for item in soup.find_all("div", class_="sc-erNlkL hfSgdj"):
-        res.append(item.get_text())
+    for item in soup.findAll('a', {'class': lambda x: x and 'tapItem' in x.split()}):
+        res.append(item['href'])
     return (res)
 
 
@@ -60,7 +60,8 @@ if __name__ == "__main__":
     temp = 0
 
     for i in range(0, len(url_res)):
-        print("Url : " + "https://fr.indeed.com" + url_res[i])
+
+        print("Url : " + url_res[i])
 
         print("-----------------------------")
 

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def getdata(url):
     r = requests.get(url)
     return r.text
@@ -52,31 +53,23 @@ if __name__ == "__main__":
     lookAllJob = job.split(', ')
     print("Enter your location:")
     location = input()
-    lookAllLocation = location.split(', ')
-    print("En teletravail ?")
-    remote = input()
-    if remote == "y":
-        option = "&remotejob=032b3046-06a3-4876-8dfd-474eb5e7ed11"
-    else:
-        option = ""
     for job in lookAllJob:
-        for location in lookAllLocation:
-            url = "https://fr.indeed.com/emplois?q=" + job + "&l=" + location + option
+        url = "https://fr.indeed.com/emplois?q=" + job + "&l=" + location + "&jt=apprenticeship"
 
-            soup = html_code(url)
+        soup = html_code(url)
 
-            job_res = job_data(soup)
-            com_res = company_data(soup)
-            all_res = all_data(soup)
-            url_res = url_data(soup)
+        job_res = job_data(soup)
+        com_res = company_data(soup)
+        all_res = all_data(soup)
+        url_res = url_data(soup)
 
-            temp = 0
+        temp = 0
 
-            for i in range(0, len(job_res)):
-                print("Company Name and Address : " + com_res[i])
-                print("Job : " + job_res[i])
-                print("Url : " + "https://fr.indeed.com" + url_res[i])
-                print("All : " + all_res[i])
-                print("-----------------------------")
+        for i in range(0, len(job_res)):
+            print("Company Name and Address : " + com_res[i])
+            print("Job : " + job_res[i])
+            print("Url : " + "https://fr.indeed.com" + url_res[i])
+            print("All : " + all_res[i])
+            print("-----------------------------")
 
-            print("Nombre de resultats pour " + job + " a " + location + " : " + str(len(job_res)))
+        print("Nombre de resultats : " + str(len(job_res)))
